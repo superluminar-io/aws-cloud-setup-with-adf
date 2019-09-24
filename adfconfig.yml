@@ -7,8 +7,8 @@ regions:
     - 
 config:
   main-notification-endpoint: 
-    - type: None # slack or email
-      target:  # Email/Slack channel who receives notifications for the main bootstrapping pipeline
+    - type: email
+      target: aws-control-tower-tests+adf@superluminar.io
   moves:
     - name: to-root
       action: safe  # Can be safe or remove-base
