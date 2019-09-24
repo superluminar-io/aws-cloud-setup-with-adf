@@ -1,0 +1,18 @@
+roles:
+  cross-account-access: AWSControlTowerExecution  # The role by ADF to assume cross account access
+
+regions:
+  deployment-account: eu-west-1 # The region you define as your main deployment region
+  targets: # A list of regions you wish to bootstrap and also deploy into via pipelines
+    - 
+config:
+  main-notification-endpoint: 
+    - type: None # slack or email
+      target:  # Email/Slack channel who receives notifications for the main bootstrapping pipeline
+  moves:
+    - name: to-root
+      action: safe  # Can be safe or remove-base
+  scp:
+    keep-default-scp: enabled  # determines if the default AWSFullAccess SCP stays attached to all OU's
+  scm:
+    auto-create-repositories: enabled
