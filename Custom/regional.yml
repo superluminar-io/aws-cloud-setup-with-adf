@@ -14,3 +14,15 @@ Resources:
           - RuleName: "SMSBASELINE-RuleForDailyBackups"
             TargetBackupVault: !Ref BackupVault
             ScheduleExpression: "cron(0 5 ? * * *)"
+
+  BackupSelection:
+    Type: "AWS::Backup::BackupSelection"
+    Properties:
+      BackupSelection:
+        SelectionName: SMSBASELINE-BackupSelection
+        IamRoleArn: !Sub "arn:aws:iam::${AWS::AccountId}:role/aws-controltower-SMSBASELINE-BackupRole"
+        ListOfTags:
+          - ConditionType: "STRINGEQUALS"
+            ConditionKey: "SMSBASELINE-Backup"
+            ConditionValue: "daily"
+      BackupPlanId: !Ref BackupPlan
