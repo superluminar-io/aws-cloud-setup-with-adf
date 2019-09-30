@@ -238,3 +238,33 @@ Resources:
               - "sts:AssumeRole"
       ManagedPolicyArns:
         - "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"
+
+# Copied from regional.yml because of https://github.com/awslabs/aws-deployment-framework/issues/96
+# This has to be kept in sync with regional.yml
+
+  BackupVault:
+    Type: "AWS::Backup::BackupVault"
+    Properties:
+      BackupVaultName: "SMSBASELINE-BackupVault"
+
+  BackupPlan:
+    Type: "AWS::Backup::BackupPlan"
+    Properties:
+      BackupPlan:
+        BackupPlanName: "SMSBASELINE-BackupVault"
+        BackupPlanRule:
+          - RuleName: "SMSBASELINE-RuleForDailyBackups"
+            TargetBackupVault: !Ref BackupVault
+            ScheduleExpression: "cron(0 5 ? * * *)"
+
+  BackupSelection:
+    Type: "AWS::Backup::BackupSelection"
+    Properties:
+      BackupSelection:
+        SelectionName: SMSBASELINE-BackupSelection
+        IamRoleArn: !Sub "arn:aws:iam::${AWS::AccountId}:role/aws-controltower-SMSBASELINE-BackupRole"
+        ListOfTags:
+          - ConditionType: "STRINGEQUALS"
+            ConditionKey: "SMSBASELINE-Backup"
+            ConditionValue: "daily"
+      BackupPlanId: !Ref BackupPlan
