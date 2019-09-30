@@ -3,14 +3,14 @@ Resources:
   BackupVault:
     Type: "AWS::Backup::BackupVault"
     Properties:
-      BackupVaultName: "BASELINE-BackupVault"
+      BackupVaultName: "SMSBASELINE-BackupVault"
 
   BackupPlan:
     Type: "AWS::Backup::BackupPlan"
     Properties:
       BackupPlan:
-        BackupPlanName: "BASELINE-BackupVault"
+        BackupPlanName: "SMSBASELINE-BackupVault"
         BackupPlanRule:
-          - RuleName: "BASELINE-RuleForDailyBackups"
+          - RuleName: "SMSBASELINE-RuleForDailyBackups"
             TargetBackupVault: !Ref BackupVault
             ScheduleExpression: "cron(0 5 ? * * *)"
