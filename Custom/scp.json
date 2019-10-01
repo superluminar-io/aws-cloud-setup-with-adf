@@ -70,6 +70,16 @@
                 "*"
             ],
             "Effect": "Deny"
+        },
+
+        {
+            "Sid": "ServiceBlocklist",
+            "Action": [
+                "datapipeline:*",
+                "opsworks:*"
+            ],
+            "Resource": "*",
+            "Effect": "Deny"
         }
 
     ]
