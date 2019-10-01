@@ -46,6 +46,11 @@ Resources:
 
 
           def lambda_handler(event, context):
+
+            if event['RequestType'] != 'Create':
+              cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
+              return
+
             ec2 = boto3.client('ec2')
             response = ec2.describe_vpcs(
               Filters=[
@@ -98,6 +103,7 @@ Resources:
                 ec2.delete_internet_gateway(InternetGatewayId=item.get('InternetGatewayId'))
 
             ec2.delete_vpc(VpcId=vpc_id)
+            cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
 
       FunctionName: aws-controltower-SMSBASELINE-ExpungeDefaultVPC
       Handler: index.lambda_handler
