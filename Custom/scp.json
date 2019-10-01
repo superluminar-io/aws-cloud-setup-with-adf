@@ -54,6 +54,23 @@
                 "arn:aws:backup:*:*:backup-vault:*"
             ],
             "Effect": "Deny"
+        },
+
+        {
+            "Sid": "PreventVPCCreation",
+            "Condition": {
+                "ArnNotLike": {
+                    "aws:PrincipalARN": "arn:aws:iam::*:role/AWSControlTowerExecution"
+                }
+            },
+            "Action": [
+                "ec2:CreateVpc"
+            ],
+            "Resource": [
+                "*"
+            ],
+            "Effect": "Deny"
         }
+
     ]
 }
