@@ -131,7 +131,7 @@ Resources:
                   - ec2:DeleteVpc
                 Resource: "*"
 
-  ExpungeDefaultVPC:
-    Type: Custom::ExpungeDefaultVPC
-    Properties:
-      ServiceToken: !GetAtt ExpungeDefaultVPCFunction.Arn
+#  ExpungeDefaultVPC:
+#    Type: Custom::ExpungeDefaultVPC
+#    Properties:
+#      ServiceToken: !GetAtt ExpungeDefaultVPCFunction.Arn
