@@ -128,7 +128,7 @@ Resources:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
         - arn:aws:iam::aws:policy/AmazonVPCFullAccess
 
-  ExpungeDefaultVPC:
-    Type: Custom::ExpungeDefaultVPC
-    Properties:
-      ServiceToken: !GetAtt ExpungeDefaultVPCFunction.Arn
+#  ExpungeDefaultVPC:
+#    Type: Custom::ExpungeDefaultVPC
+#    Properties:
+#      ServiceToken: !GetAtt ExpungeDefaultVPCFunction.Arn
