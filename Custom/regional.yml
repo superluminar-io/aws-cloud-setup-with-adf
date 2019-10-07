@@ -115,7 +115,7 @@ Resources:
   ExpungeDefaultVPCRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: aws-controltower-SMSBASELINE-ExpungeDefaultVPCRole
+      RoleName: !Sub "aws-controltower-SMSBASELINE-ExpungeDefaultVPCRole-${AWS::Region}"
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
