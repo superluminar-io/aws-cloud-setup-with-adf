@@ -239,6 +239,21 @@ Resources:
       ManagedPolicyArns:
         - "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"
 
+# Config Rules - currently only work in regions supported by Control Tower
+# since they depend on a working AWS Config base setup (recorder)
+
+  AWSConfigRule:
+    Type: AWS::Config::ConfigRule
+    Properties:
+      ConfigRuleName: SMSBASELINE-EnforceTags
+      InputParameters:
+        tag1Key: Name
+        tag1Value: !Ref AWS::NoValue
+      Source:
+        Owner: AWS
+        SourceIdentifier: REQUIRED_TAGS
+
+
 # Copied from regional.yml because of https://github.com/awslabs/aws-deployment-framework/issues/96
 # This has to be kept in sync with regional.yml
 
