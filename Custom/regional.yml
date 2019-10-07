@@ -64,6 +64,7 @@ Resources:
             )
 
             if not response.get('Vpcs'):
+              cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
               logger.info('no default vpc to delete')
               return
 
