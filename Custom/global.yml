@@ -248,7 +248,13 @@ Resources:
       ConfigRuleName: SMSBASELINE-EnforceTags
       InputParameters:
         tag1Key: Name
-        tag1Value: !Ref AWS::NoValue
+        tag2Key: CostCenter
+        tag3Key: Terminate
+        tag4Key: Monitoring
+        tag5Key: Scheduled
+        tag6Key: Owner
+        tag7Key: BillingContact
+        tag8Key: Backup
       Source:
         Owner: AWS
         SourceIdentifier: REQUIRED_TAGS
