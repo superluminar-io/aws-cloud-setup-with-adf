@@ -268,3 +268,110 @@ Resources:
             ConditionKey: "SMSBASELINE-Backup"
             ConditionValue: "daily"
       BackupPlanId: !Ref BackupPlan
+
+  # Remove Default VPC
+  ExpungeDefaultVPCFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        ZipFile: |
+          import base64
+          import json
+          import logging
+          import string
+          import boto3
+          from botocore.vendored import requests
+          import cfnresponse
+
+          logger = logging.getLogger()
+          logger.setLevel(logging.INFO)
+
+
+          def lambda_handler(event, context):
+
+            if event['RequestType'] != 'Create':
+              cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
+              return
+
+            ec2 = boto3.client('ec2')
+            response = ec2.describe_vpcs(
+              Filters=[
+                {
+                  'Name': 'isDefault',
+                  'Values': [
+                      'true',
+                  ]
+                },
+              ],
+            )
+
+            if not response.get('Vpcs'):
+              cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
+              logger.info('no default vpc to delete')
+              return
+
+            vpc_id = response.get('Vpcs')[0]['VpcId']
+
+            # describe subnets
+            resp_desc_snet = ec2.describe_subnets(
+              Filters=[
+                {
+                  'Name': 'vpc-id',
+                  'Values': [
+                    vpc_id,
+                  ]
+                },
+              ],
+            )
+
+            # delete every subnet
+            for item in resp_desc_snet.get('Subnets'):
+                ec2.delete_subnet(SubnetId=item.get('SubnetId'))
+
+            # describe internet gateway
+            resp_desc_igw = ec2.describe_internet_gateways(
+              Filters=[
+                  {
+                      'Name': 'attachment.vpc-id',
+                      'Values': [
+                          vpc_id,
+                      ]
+                  },
+              ],
+            )
+            for item in resp_desc_igw.get('InternetGateways'):
+                # Detach the IGW
+                ec2.detach_internet_gateway(InternetGatewayId=item.get('InternetGatewayId'), VpcId=vpc_id)
+                # Delete the IGW
+                ec2.delete_internet_gateway(InternetGatewayId=item.get('InternetGatewayId'))
+
+            ec2.delete_vpc(VpcId=vpc_id)
+            cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
+
+      FunctionName: aws-controltower-SMSBASELINE-ExpungeDefaultVPC
+      Handler: index.lambda_handler
+      Timeout: 30
+      Role: !GetAtt ExpungeDefaultVPCRole.Arn
+      Runtime: python3.7
+
+  ExpungeDefaultVPCRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: aws-controltower-SMSBASELINE-ExpungeDefaultVPCRole
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/AmazonVPCFullAccess
+
+  ExpungeDefaultVPC:
+    Type: Custom::ExpungeDefaultVPC
+    Properties:
+      ServiceToken: !GetAtt ExpungeDefaultVPCFunction.Arn
