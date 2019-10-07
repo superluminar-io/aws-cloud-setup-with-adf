@@ -268,14 +268,3 @@ Resources:
             ConditionKey: "SMSBASELINE-Backup"
             ConditionValue: "daily"
       BackupPlanId: !Ref BackupPlan
-
-  AWSConfigRule:
-    Type: AWS::Config::ConfigRule
-    Properties:
-      ConfigRuleName: SMSBASELINE-EnforceTags
-      InputParameters:
-        tag1Key: Name
-        tag1Value: !Ref AWS::NoValue
-      Source:
-        Owner: AWS
-        SourceIdentifier: REQUIRED_TAGS
