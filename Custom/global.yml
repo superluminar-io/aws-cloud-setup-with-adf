@@ -242,10 +242,10 @@ Resources:
 # Config Rules - currently only work in regions supported by Control Tower
 # since they depend on a working AWS Config base setup (recorder)
 
-  AWSConfigRule:
+  AWSConfigRuleEnforceTags1:
     Type: AWS::Config::ConfigRule
     Properties:
-      ConfigRuleName: SMSBASELINE-EnforceTags
+      ConfigRuleName: SMSBASELINE-EnforceTags1
       InputParameters:
         tag1Key: Name
         tag2Key: CostCenter
@@ -253,13 +253,21 @@ Resources:
         tag4Key: Monitoring
         tag5Key: Scheduled
         tag6Key: Owner
-# Currently only up to six tags are allowed in this rule
-#        tag7Key: BillingContact
-#        tag8Key: Backup
       Source:
         Owner: AWS
         SourceIdentifier: REQUIRED_TAGS
 
+  # Currently only up to six tags are allowed in REQUIRED_TAGS rule so split it up
+  AWSConfigRuleEnforceTags2:
+    Type: AWS::Config::ConfigRule
+    Properties:
+      ConfigRuleName: SMSBASELINE-EnforceTags2
+      InputParameters:
+        tag1Key: BillingContact
+        tag2Key: Backup
+      Source:
+        Owner: AWS
+        SourceIdentifier: REQUIRED_TAGS
 
 # Copied from regional.yml because of https://github.com/awslabs/aws-deployment-framework/issues/96
 # This has to be kept in sync with regional.yml
