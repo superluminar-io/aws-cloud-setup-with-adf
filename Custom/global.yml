@@ -281,6 +281,20 @@ Resources:
         Owner: AWS
         SourceIdentifier: EC2_INSTANCE_MANAGED_BY_SSM
 
+  AWSConfigRuleEnforceInspectorOnEc2:
+    Type: AWS::Config::ConfigRule
+    Properties:
+      ConfigRuleName: SMSBASELINE-EnforceInspectorOnEc2
+      InputParameters:
+        applicationNames: AwsAgent
+        platformType: Linux
+      Scope:
+        ComplianceResourceTypes:
+          - AWS::SSM::ManagedInstanceInventory
+      Source:
+        Owner: AWS
+        SourceIdentifier: EC2_MANAGEDINSTANCE_APPLICATIONS_REQUIRED
+
 # Copied from regional.yml because of https://github.com/awslabs/aws-deployment-framework/issues/96
 # This has to be kept in sync with regional.yml
 
