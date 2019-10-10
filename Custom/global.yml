@@ -264,7 +264,7 @@ Resources:
       ConfigRuleName: SMSBASELINE-EnforceTags2
       InputParameters:
         tag1Key: BillingContact
-        tag2Key: Backup
+        tag2Key: SMSBASELINE-Backup
       Source:
         Owner: AWS
         SourceIdentifier: REQUIRED_TAGS
