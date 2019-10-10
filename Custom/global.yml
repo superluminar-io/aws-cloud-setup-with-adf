@@ -269,6 +269,18 @@ Resources:
         Owner: AWS
         SourceIdentifier: REQUIRED_TAGS
 
+  AWSConfigRuleEnforceEC2ManagedBySSM:
+    Type: AWS::Config::ConfigRule
+    Properties:
+      ConfigRuleName: SMSBASELINE-EnforceEC2ManagedBySSM
+      Scope:
+        ComplianceResourceTypes:
+          - AWS::EC2::Instance
+          - AWS::SSM::ManagedInstanceInventory
+      Source:
+        Owner: AWS
+        SourceIdentifier: EC2_INSTANCE_MANAGED_BY_SSM
+
 # Copied from regional.yml because of https://github.com/awslabs/aws-deployment-framework/issues/96
 # This has to be kept in sync with regional.yml
 
