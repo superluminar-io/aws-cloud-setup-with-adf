@@ -28,6 +28,9 @@
             ],
             "Resource": "*",
             "Condition": {
+                "ArnNotLike": {
+                    "aws:PrincipalARN": "arn:aws:iam::*:role/AWSControlTowerExecution"
+                },
                 "StringNotEquals": {
                     "aws:RequestedRegion": [
                         "eu-central-1",
