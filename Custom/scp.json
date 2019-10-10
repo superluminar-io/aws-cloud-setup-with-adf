@@ -80,7 +80,21 @@
             ],
             "Resource": "*",
             "Effect": "Deny"
-        }
+        },
 
+        {
+            "Sid": "DenyConfigRuleChange",
+            "Effect": "Deny",
+            "Action": [
+                "config:PutConfigRule",
+                "config:DeleteConfigRule"
+            ],
+            "Resource": ["*"],
+            "Condition": {
+                "ArnNotLike": {
+                    "aws:PrincipalARN": "arn:aws:iam::*:role/AWSControlTowerExecution"
+                }
+            }
+        }
     ]
 }
